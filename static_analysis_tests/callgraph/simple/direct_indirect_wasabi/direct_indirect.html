@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+ 	<head><meta charset="utf-8"></head>
+ 	<body>
+		<h1>Source</h1>
+		<pre id="source"></pre>
+
+		<h1>Output</h1>
+		<pre id="output"></pre>
+
+        <script type="text/javascript" src="direct_indirect.wasabi.js"></script>
+        <script type="text/javascript" src="call-graph.js"></script>
+        <script type="text/javascript" src="save-call-graph.js"></script>
+        <script type="text/javascript">
+			function output(string) {
+				document.getElementById("output").innerHTML += string;
+			}
+
+			// "async main"
+			(async function() {
+				document.getElementById("source").innerHTML = 
+					await fetch("../direct_indirect.wat")
+						.then(response => response.text());
+
+				let importObject = {
+					imports: {
+						output,
+						global: 1 // value for the imported global: 0 or 1
+					}
+				};
+
+				WebAssembly.instantiateStreaming(fetch('direct_indirect_instr.wasm'), importObject).then(obj => obj.instance.exports.main());
+
+				// instance.exports.main();
+			})();
+		</script>
+	</body>
+</html>

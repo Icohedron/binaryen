@@ -46,6 +46,8 @@ struct PrintCallGraph : public Pass {
          "fillcolor=\"white\"];\n"
          "    \"A\" -> \"B\" [style=\"filled, rounded\", label = \"Direct "
          "Call\"];\n"
+         "    \"C\" -> \"D\" [style=\"filled, rounded, dashed\", label = \"Potential Indirect "
+         "Call\"];\n"
          "  }\n\n"
          "  node [shape=box, fontname=courier, fontsize=10];\n";
 
@@ -91,6 +93,20 @@ struct PrintCallGraph : public Pass {
         visitedTargets.insert(target->name);
         std::cout << "  \"" << currFunction->name << "\" -> \"" << target->name
                   << "\"; // call\n";
+      }
+
+      void visitCallIndirect(CallIndirect* curr) {
+        for (auto& segment : module->table.segments) {
+          for (auto& curr : segment.data) {
+            auto* func = module->getFunction(curr);
+            if (visitedTargets.count(func->name) > 0) {
+              return;
+            }
+            visitedTargets.insert(func->name);
+            std::cout << "  \"" << currFunction->name << "\" -> \"" << func->name
+                      << "\" [style=\"filled, rounded, dashed\"]; // call\n";
+          }
+        }
       }
     };
     CallPrinter printer(module);

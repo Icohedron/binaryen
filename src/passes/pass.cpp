@@ -339,6 +339,8 @@ void PassRegistry::registerPasses() {
                "removes local.tees, replacing them with sets and gets",
                createUnteePass);
   registerPass("vacuum", "removes obviously unneeded code", createVacuumPass);
+  registerPass("taint", "performs a taint analysis", createTaintPass);
+  registerPass("print-call-graph-edges", "print call graph edges (caller,callee)", createPrintCallGraphEdgesPass);
   // registerPass(
   //   "lower-i64", "lowers i64 into pairs of i32s", createLowerInt64Pass);
 }

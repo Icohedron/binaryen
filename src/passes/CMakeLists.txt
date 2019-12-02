@@ -45,11 +45,13 @@ SET(passes_SOURCES
   Precompute.cpp
   Print.cpp
   PrintCallGraph.cpp
+  PrintCallGraphEdges.cpp
   PrintFeatures.cpp
   PrintFunctionMap.cpp
   StackIR.cpp
   Strip.cpp
   StripTargetFeatures.cpp
+  Taint.cpp
   RedundantSetElimination.cpp
   RelooperJumpThreading.cpp
   ReReloop.cpp
